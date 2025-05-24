@@ -89,7 +89,7 @@ const products: Product[] = [
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
 const cart: CartItem[] = [];
 
-const total: number = 0;
+let total: number = 0;
 
 // Exercise 1
 const buy = (id: number): void => {
@@ -106,8 +106,12 @@ const buy = (id: number): void => {
 		cart.push({ ...product, quantity: 1 });
 	}
 
+	updateTotalUI();
+
 	console.log('🛒 Carret actual:');
 	console.table(cart);
+
+	console.log('🛒 Total:', total);
 
 	// 1. Loop for to the array products to get the item to add to cart
 	// 2. Add found product to the cart array
@@ -116,15 +120,22 @@ const buy = (id: number): void => {
 // Exercise 2
 const cleanCart = () => {
 	cart.length = 0;
-	updateCartUI();
+	resetCartUI();
 
 	console.log('🛒 Carret actual:');
 	console.table(cart);
+	console.log('🛒 Total:', total);
 };
 
 // Exercise 3
 // Calculate total price of the cart using the "cartList" array
-// const calculateTotal = () => {};
+const calculateTotal = () => {
+	total = 0;
+	for (const item of cart) {
+		total += item.price * item.quantity;
+	}
+	return total;
+};
 
 // Exercise 4
 // Apply promotions to each item in the array "cart"
@@ -143,7 +154,14 @@ const cleanCart = () => {
 // 	printCart();
 // };
 
-const updateCartUI = (): void => {
+const updateTotalUI = (): void => {
+	const totalPriceElements = document.getElementById('total_price');
+	if (totalPriceElements) {
+		totalPriceElements.textContent = calculateTotal().toFixed(2);
+	}
+};
+
+const resetCartUI = (): void => {
 	const countEl = document.getElementById('count_product');
 	if (countEl) countEl.textContent = '0';
 
