@@ -114,7 +114,13 @@ const buy = (id: number): void => {
 };
 
 // Exercise 2
-// const cleanCart = () => {};
+const cleanCart = () => {
+	cart.length = 0;
+	updateCartUI();
+
+	console.log('🛒 Carret actual:');
+	console.table(cart);
+};
 
 // Exercise 3
 // Calculate total price of the cart using the "cartList" array
@@ -137,6 +143,25 @@ const buy = (id: number): void => {
 // 	printCart();
 // };
 
+const updateCartUI = (): void => {
+	const countEl = document.getElementById('count_product');
+	if (countEl) countEl.textContent = '0';
+
+	const cartList = document.getElementById('cart_list');
+	if (cartList) cartList.innerHTML = '';
+
+	const totalPriceEl = document.getElementById('total_price');
+	if (totalPriceEl) totalPriceEl.textContent = '0';
+};
+
+const emptyCartButtons = (): void => {
+	const cleanCartButton = document.getElementById('clean-cart');
+	if (cleanCartButton) {
+		console.table(cart);
+		cleanCartButton.addEventListener('click', cleanCart);
+	}
+};
+
 const registerAddToCartButtons = (): void => {
 	const addToCartButtons = document.querySelectorAll(
 		'.add-to-cart'
@@ -155,3 +180,4 @@ const registerAddToCartButtons = (): void => {
 };
 
 document.addEventListener('DOMContentLoaded', registerAddToCartButtons);
+document.addEventListener('DOMContentLoaded', emptyCartButtons);
