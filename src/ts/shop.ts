@@ -3,16 +3,19 @@ type Offer = {
 	percent: number;
 };
 
+type ProductType = 'grocery' | 'beauty' | 'clothes';
+
 interface Product {
 	id: number;
 	name: string;
 	price: number;
-	type: string;
+	type: ProductType;
 	offer?: Offer;
 }
 
 interface CartItem extends Product {
 	quantity: number;
+	subtotalWithDiscount?: number;
 }
 
 // If you have time, you can move this variable "products" to a json or js file and load the data in this js. It will look more professional
@@ -106,15 +109,13 @@ const buy = (id: number): void => {
 		cart.push({ ...product, quantity: 1 });
 	}
 
+	calculateTotal();
 	updateTotalUI();
 
 	console.log('🛒 Carret actual:');
 	console.table(cart);
 
 	console.log('🛒 Total:', total);
-
-	// 1. Loop for to the array products to get the item to add to cart
-	// 2. Add found product to the cart array
 };
 
 // Exercise 2
@@ -129,17 +130,35 @@ const cleanCart = () => {
 
 // Exercise 3
 // Calculate total price of the cart using the "cartList" array
-const calculateTotal = () => {
-	total = 0;
-	for (const item of cart) {
-		total += item.price * item.quantity;
-	}
+const calculateTotal = (): number => {
+	applyPromotionsCart();
+	total = cart.reduce((sum, item) => {
+		return (
+			sum +
+			(item.subtotalWithDiscount !== undefined
+				? item.subtotalWithDiscount
+				: item.price * item.quantity)
+		);
+	}, 0);
 	return total;
 };
 
 // Exercise 4
 // Apply promotions to each item in the array "cart"
-// const applyPromotionsCart = () => {};
+const applyPromotionsCart = (): void => {
+	for (const item of cart) {
+		if (item.offer && item.quantity >= item.offer.number) {
+			const discountFactor = 1 - item.offer.percent / 100;
+			item.subtotalWithDiscount = +(
+				item.price *
+				discountFactor *
+				item.quantity
+			).toFixed(2);
+		} else {
+			delete item.subtotalWithDiscount;
+		}
+	}
+};
 
 // Exercise 5
 // Fill the shopping cart modal manipulating the shopping cart dom
@@ -157,25 +176,24 @@ const calculateTotal = () => {
 const updateTotalUI = (): void => {
 	const totalPriceElements = document.getElementById('total_price');
 	if (totalPriceElements) {
-		totalPriceElements.textContent = calculateTotal().toFixed(2);
+		totalPriceElements.textContent = total.toFixed(2);
 	}
 };
 
 const resetCartUI = (): void => {
-	const countEl = document.getElementById('count_product');
-	if (countEl) countEl.textContent = '0';
+	const countElements = document.getElementById('count_product');
+	if (countElements) countElements.textContent = '0';
 
 	const cartList = document.getElementById('cart_list');
 	if (cartList) cartList.innerHTML = '';
 
-	const totalPriceEl = document.getElementById('total_price');
-	if (totalPriceEl) totalPriceEl.textContent = '0';
+	const totalPriceElements = document.getElementById('total_price');
+	if (totalPriceElements) totalPriceElements.textContent = '0';
 };
 
 const emptyCartButtons = (): void => {
 	const cleanCartButton = document.getElementById('clean-cart');
-	if (cleanCartButton) {
-		console.table(cart);
+	if (cleanCartButton instanceof HTMLButtonElement) {
 		cleanCartButton.addEventListener('click', cleanCart);
 	}
 };
@@ -197,5 +215,7 @@ const registerAddToCartButtons = (): void => {
 	});
 };
 
-document.addEventListener('DOMContentLoaded', registerAddToCartButtons);
-document.addEventListener('DOMContentLoaded', emptyCartButtons);
+document.addEventListener('DOMContentLoaded', () => {
+	registerAddToCartButtons();
+	emptyCartButtons();
+});
