@@ -112,21 +112,12 @@ const buy = (id: number): void => {
 	calculateTotal();
 	updateTotalUI();
 	printCart();
-
-	console.log('🛒 Carret actual:');
-	console.table(cart);
-
-	console.log('🛒 Total:', total);
 };
 
 // Exercise 2
 const cleanCart = () => {
 	cart.length = 0;
 	resetCartUI();
-
-	console.log('🛒 Carret actual:');
-	console.table(cart);
-	console.log('🛒 Total:', total);
 };
 
 // Exercise 3
@@ -170,7 +161,20 @@ const printCart = () => {
 // ** Nivell II **
 
 // Exercise 7
-// const removeFromCart = (id: number) => {};
+const removeFromCart = (id: number) => {
+	const index = cart.findIndex((item) => item.id === id);
+	if (index === -1) return;
+
+	if (cart[index].quantity > 1) {
+		cart[index].quantity--;
+	} else {
+		cart.splice(index, 1);
+	}
+
+	calculateTotal();
+	updateTotalUI();
+	printCart();
+};
 
 // const open_modal = (): void => {
 // 	printCart();
@@ -200,14 +204,20 @@ const updateListUI = (): void => {
 		const tr = document.createElement('tr');
 
 		tr.innerHTML = `
-		  <th scope="row">${item.name}</th>
-		  <td>$${price}</td>
-		  <td>${qty}</td>
-		  <td>$${lineTotal}</td>
+			<th scope="row">${item.name}</th>
+			<td>$${price}</td>
+			<td><button class="btn btn-sm btn-outline-danger ms-2 remove-button" data-id="${item.id}" aria-label="Remove one ${item.name}">&minus;</button>${qty}</td>
+			<td>$${lineTotal}</td>
 		`;
 
 		listElements.appendChild(tr);
 	});
+	removeFromCartButtons();
+
+	console.log('🛒 Carret actual:');
+	console.table(cart);
+
+	console.log('🛒 Total:', total);
 };
 
 const updateTotalUI = (): void => {
@@ -226,6 +236,11 @@ const resetCartUI = (): void => {
 
 	const totalPriceElements = document.getElementById('total_price');
 	if (totalPriceElements) totalPriceElements.textContent = '0';
+
+	console.log('🛒 Carret actual:');
+	console.table(cart);
+
+	console.log('🛒 Total:', total);
 };
 
 const emptyCartButtons = (): void => {
@@ -249,6 +264,17 @@ const registerAddToCartButtons = (): void => {
 		console.log(id, 'Button', pid);
 
 		button.addEventListener('click', () => buy(id));
+	});
+};
+
+const removeFromCartButtons = (): void => {
+	const removeItemButton =
+		document.querySelectorAll<HTMLButtonElement>('.remove-button');
+
+	removeItemButton.forEach((button) => {
+		const pid = button.dataset.id;
+		if (!pid) return;
+		button.addEventListener('click', () => removeFromCart(Number(pid)));
 	});
 };
 
