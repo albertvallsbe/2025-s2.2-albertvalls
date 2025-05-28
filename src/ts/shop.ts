@@ -3,16 +3,19 @@ type Offer = {
 	percent: number;
 };
 
+type ProductType = 'grocery' | 'beauty' | 'clothes';
+
 interface Product {
 	id: number;
 	name: string;
 	price: number;
-	type: string;
+	type: ProductType;
 	offer?: Offer;
 }
 
 interface CartItem extends Product {
 	quantity: number;
+	subtotalWithDiscount?: number;
 }
 
 // If you have time, you can move this variable "products" to a json or js file and load the data in this js. It will look more professional
@@ -89,7 +92,7 @@ const products: Product[] = [
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
 const cart: CartItem[] = [];
 
-const total: number = 0;
+let total: number = 0;
 
 // Exercise 1
 const buy = (id: number): void => {
@@ -106,27 +109,63 @@ const buy = (id: number): void => {
 		cart.push({ ...product, quantity: 1 });
 	}
 
+	calculateTotal();
+	updateTotalUI();
+	printCart();
+
 	console.log('🛒 Carret actual:');
 	console.table(cart);
 
-	// 1. Loop for to the array products to get the item to add to cart
-	// 2. Add found product to the cart array
+	console.log('🛒 Total:', total);
 };
 
 // Exercise 2
-// const cleanCart = () => {};
+const cleanCart = () => {
+	cart.length = 0;
+	resetCartUI();
+
+	console.log('🛒 Carret actual:');
+	console.table(cart);
+	console.log('🛒 Total:', total);
+};
 
 // Exercise 3
 // Calculate total price of the cart using the "cartList" array
-// const calculateTotal = () => {};
+const calculateTotal = (): number => {
+	applyPromotionsCart();
+	total = cart.reduce((sum, item) => {
+		return (
+			sum +
+			(item.subtotalWithDiscount !== undefined
+				? item.subtotalWithDiscount
+				: item.price * item.quantity)
+		);
+	}, 0);
+	return total;
+};
 
 // Exercise 4
 // Apply promotions to each item in the array "cart"
-// const applyPromotionsCart = () => {};
+const applyPromotionsCart = (): void => {
+	for (const item of cart) {
+		if (item.offer && item.quantity >= item.offer.number) {
+			const discountFactor = 1 - item.offer.percent / 100;
+			item.subtotalWithDiscount = +(
+				item.price *
+				discountFactor *
+				item.quantity
+			).toFixed(2);
+		} else {
+			delete item.subtotalWithDiscount;
+		}
+	}
+};
 
 // Exercise 5
 // Fill the shopping cart modal manipulating the shopping cart dom
-// const printCart = () => {};
+const printCart = () => {
+	updateListUI();
+};
 
 // ** Nivell II **
 
@@ -136,6 +175,65 @@ const buy = (id: number): void => {
 // const open_modal = (): void => {
 // 	printCart();
 // };
+
+const updateListUI = (): void => {
+	const countElements = document.getElementById('count_product');
+	if (countElements) {
+		const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+		countElements.textContent = totalCount.toString();
+	}
+
+	const listElements = document.getElementById('cart_list');
+	if (!listElements) return;
+	listElements.innerHTML = '';
+
+	cart.forEach((item) => {
+		const price = item.price.toFixed(2);
+		const qty = item.quantity;
+
+		const lineTotal = (
+			item.subtotalWithDiscount !== undefined
+				? item.subtotalWithDiscount
+				: item.price * item.quantity
+		).toFixed(2);
+
+		const tr = document.createElement('tr');
+
+		tr.innerHTML = `
+		  <th scope="row">${item.name}</th>
+		  <td>$${price}</td>
+		  <td>${qty}</td>
+		  <td>$${lineTotal}</td>
+		`;
+
+		listElements.appendChild(tr);
+	});
+};
+
+const updateTotalUI = (): void => {
+	const totalPriceElements = document.getElementById('total_price');
+	if (totalPriceElements) {
+		totalPriceElements.textContent = total.toFixed(2);
+	}
+};
+
+const resetCartUI = (): void => {
+	const countElements = document.getElementById('count_product');
+	if (countElements) countElements.textContent = '0';
+
+	const cartList = document.getElementById('cart_list');
+	if (cartList) cartList.innerHTML = '';
+
+	const totalPriceElements = document.getElementById('total_price');
+	if (totalPriceElements) totalPriceElements.textContent = '0';
+};
+
+const emptyCartButtons = (): void => {
+	const cleanCartButton = document.getElementById('clean-cart');
+	if (cleanCartButton instanceof HTMLButtonElement) {
+		cleanCartButton.addEventListener('click', cleanCart);
+	}
+};
 
 const registerAddToCartButtons = (): void => {
 	const addToCartButtons = document.querySelectorAll(
@@ -154,4 +252,7 @@ const registerAddToCartButtons = (): void => {
 	});
 };
 
-document.addEventListener('DOMContentLoaded', registerAddToCartButtons);
+document.addEventListener('DOMContentLoaded', () => {
+	registerAddToCartButtons();
+	emptyCartButtons();
+});
