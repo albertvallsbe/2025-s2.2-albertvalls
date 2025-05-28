@@ -35,3 +35,20 @@ const validate = () => {
 		alert('Form submitted successfully');
 	}
 };
+
+const validateForm = () => {
+	const form = document.getElementById(
+		'checkoutForm'
+	) as HTMLFormElement | null;
+	if (form) {
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			validate();
+		});
+	}
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+	validateForm();
+});
