@@ -111,6 +111,7 @@ const buy = (id: number): void => {
 
 	calculateTotal();
 	updateTotalUI();
+	printCart();
 
 	console.log('🛒 Carret actual:');
 	console.table(cart);
@@ -162,7 +163,9 @@ const applyPromotionsCart = (): void => {
 
 // Exercise 5
 // Fill the shopping cart modal manipulating the shopping cart dom
-// const printCart = () => {};
+const printCart = () => {
+	updateListUI();
+};
 
 // ** Nivell II **
 
@@ -172,6 +175,40 @@ const applyPromotionsCart = (): void => {
 // const open_modal = (): void => {
 // 	printCart();
 // };
+
+const updateListUI = (): void => {
+	const countElements = document.getElementById('count_product');
+	if (countElements) {
+		const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+		countElements.textContent = totalCount.toString();
+	}
+
+	const listElements = document.getElementById('cart_list');
+	if (!listElements) return;
+	listElements.innerHTML = '';
+
+	cart.forEach((item) => {
+		const price = item.price.toFixed(2);
+		const qty = item.quantity;
+
+		const lineTotal = (
+			item.subtotalWithDiscount !== undefined
+				? item.subtotalWithDiscount
+				: item.price * item.quantity
+		).toFixed(2);
+
+		const tr = document.createElement('tr');
+
+		tr.innerHTML = `
+		  <th scope="row">${item.name}</th>
+		  <td>$${price}</td>
+		  <td>${qty}</td>
+		  <td>$${lineTotal}</td>
+		`;
+
+		listElements.appendChild(tr);
+	});
+};
 
 const updateTotalUI = (): void => {
 	const totalPriceElements = document.getElementById('total_price');
