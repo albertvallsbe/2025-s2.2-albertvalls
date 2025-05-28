@@ -93,9 +93,8 @@
 						<label for="fEmail" class="form-label">Email:</label>
 						<input id="fEmail" class="form-control ml-3" type="email" placeholder="Email" minlength="3"
 							required />
-						<div id="errorEmail" class="invalid-feedback">This field is required and must contain an '@' and
-							have, at
-							least, 3 characters</div>
+						<div id="errorEmail" class="invalid-feedback">The email must follow a typical format (e.g.,
+							user@domain.com)</div>
 					</div>
 					<div class="mt-3 ">
 						<label for="fAddress" class="form-label">Address:</label>
@@ -119,7 +118,8 @@
 						<label for="fPassword" class="form-label">Password:</label>
 						<input id="fPassword" class="form-control" title="(4-8 characters)" type="password"
 							minlength="4" maxlength="8" placeholder="Password" required />
-						<div id="errorPassword" class="invalid-feedback">Enter a correct password</div>
+						<div id="errorPassword" class="invalid-feedback">Enter a password at least 4-8 characters, with
+							a letter and a number </div>
 					</div>
 					<div class="mt-3">
 						<label for="fPhone" class="form-label">Phone Number:</label>
