@@ -1,66 +1,106 @@
-# Sprint 2 IT Academy | Shop
+# 🎓 2025-S2.1 Pràctica Acadèmica / 2025-S2.1 Academic Practice
 
-## Introduction
+Albert Valls
 
-A company in the e-commerce sector has asked us for a web application that allows them to offer the purchase of their products through the internet.
+---
 
-You will be in charge of setting up an initial demo version of the application for the client: management of the shopping cart and the application of the promotions on the final price. You have 1 week to finish this part of sprint (2.2).
+## 📚 Índex / Table of Contents
 
-<br>
+1. [Sobre el projecte / About](#1-sobre-el-projecte--about)
+2. [Funcionalitats / Features](#2-funcionalitats--features)
+3. [Tecnologia / Tech Stack](#3-tecnologia--tech-stack)
+4. [Demo en línia / Live Demo](#4-demo-en-línia--live-demo)
+5. [Repositori / Repository](#5-repositori--repository)
+6. [Instal·lació / Installation](#6-instal·lació--installation)
 
-## Requirements
+---
 
+## 1. Sobre el projecte / About
 
-1. Clone this repo
+**CAT:**  
+Aquest projecte és una pràctica acadèmica senzilla basada en HTML i JavaScript, però escrita amb TypeScript. El codi TypeScript es compila i s’actualitza en temps real, i també es fa servir Bootstrap via CDN per als estils.
+
+**EN:**  
+This project is a simple academic exercise built with HTML and JavaScript, but authored in TypeScript. The TypeScript code is compiled and auto‐rebuilt, and Bootstrap is included via CDN for styling.
+
+---
+
+## 2. Funcionalitats / Features
+
+- ✅ **TypeScript → JavaScript**
+- ✅ **Bootstrap 5 via CDN**
+
+---
+
+## 3. Tecnologia / Tech Stack
+
+- **JavaScript (ES6+)**
+- **TypeScript**
+- **Git & GitHub**
+- **Node.js**
+- **Bootstrap 5**
+- **Node.js**
+
+---
+
+## 4. Demo en línia / Live Demo
+
+**Live:** 👉 https://albertvallsbe.github.io/2025-s2.2-albertvalls/
+
+**CAT:**  
+Pots veure la versió en línia del projecte a través de GitHub Pages.
+
+**EN:**  
+You can view the live version of this project via GitHub Pages.
+
+---
+
+## 5. Repositori / Repository
+
+**Github:** 👉 https://github.com/albertvallsbe/2025-s2.2-albertvalls
+
+## 6. Instal·lació / Installation
+
+**CAT:**
+
+_Segueix aquests passos per clonar el projecte i fer servir el compilador TypeScript en mode “watch”._
+
+**EN:**
+
+_Follow these steps to clone the project and run the TypeScript compiler in watch mode._
+
+**Requeriments / Prerequisites**
+
+- Node.js
+
+### 1) Clonar el repositori / Clone the repository
+
 ```bash
-$ git clone https://github.com/IT-Academy-BCN/starter-code-frontend-shop
+git clone https://github.com/albertvallsbe/2025-s2.2-albertvalls.git
 ```
 
-2. Unlink your repo from the itacademy repository.
-(Explanation: You have to upload the code to your GitHub repository, not to the IT Academy. That's why you have to unlink your project from IT Academy GitHub with the following command)
+### 2) Entrar al directori del projecte / Navigate into the project directory
 
-```bash
-$ git remote rm origin
+```
+cd 2025-s2.2-albertvalls
 ```
 
-3. Link your repo to the repository you have to create in your github account
-(Explanation: Now your project is not linked to any remote repository. In order to upload your code, you have to link your project to the new repository created on github.com using the following command)
+### 3) Instal·lar dependències / Install dependencies
 
-```bash
-$ git remote add origin <your repo name!>
+```
+npm i
 ```
 
-<br>
+### 4) Executar el compilador TypeScript en watch mode / Run TypeScript compiler in watch mode
 
-## Submission
+```
+npm run ts-w
+```
 
-1. It is necessary to upload each exercise in a separate commit. The commit name must clearly indicate its content.
+or:
 
-2. Upload the link to your GitHub repository to the virtual campus, enabling your mentor to review and provide feedback.
+```
+npx tsc --watch
+```
 
-
-
-<br>
-
-## Introduction
-
-The statement of the exercise is available on the virtual campus.
-
-<br>
-
-
-## Instructions
-
-You have the following indications from the frontend manager:
-
-- You have prepared the base of the project on which you will work: https://github.com/IT-Academy-BCN/starter-code-frontend-shop
-
-- The base of the project on which you will work has already created all the files, and an initial version of the interface, so you can focus on programming the logic.
-
-- As at the moment we don't consume data from a server using an API, we will work with hardcoded data in the application. For the moment we will implement the logic using a small group of 9 products divided in 3 sections.
-
-- Except for the last level, showing the result of the functions by console is enough.
-
-- The logic to implement will be placed in the src/grocery.js and src/checkout.js files. You will see that the built in functions have already been created for you to implement them.
-
-- It is forbidden to copy the code, since this way you don't learn anything. Furthermore, as you can see, the second release of sprint 5 is a mini-level test with the mentor, in which you will have to demonstrate live that you have acquired the javascript concepts. Don't worry, if you work on the releases you won't have any problems.
+### 5) Obre el live Server de VSCode / Open the Live Server of VSCode

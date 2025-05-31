@@ -205,9 +205,9 @@ const updateListUI = (): void => {
 
 		tr.innerHTML = `
 			<th scope="row">${item.name}</th>
-			<td>$${price}</td>
+			<td>${price}€</td>
 			<td><button class="btn btn-sm btn-outline-danger ms-2 remove-button" data-id="${item.id}" aria-label="Remove one ${item.name}">&minus;</button>${qty}</td>
-			<td>$${lineTotal}</td>
+			<td>${lineTotal}€</td>
 		`;
 
 		listElements.appendChild(tr);
